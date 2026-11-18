@@ -1,0 +1,91 @@
+{
+  "name": "@charape/baileys",
+  "version": "1.0.11",
+  "description": "Enterprise-grade WhatsApp Web Baileys library and multi-bot runner supervisor with session crash guard.",
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./*": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
+    "./WAProto": {
+      "types": "./WAProto/index.d.ts",
+      "import": "./WAProto/index.js",
+      "require": "./WAProto/index.cjs",
+      "default": "./WAProto/index.js"
+    },
+    "./WAProto/*": "./WAProto/*"
+  },
+  "bin": {
+    "charape": "bin/charape.js"
+  },
+  "files": [
+    "lib",
+    "WAProto",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node bin/charape.js start",
+    "check": "node bin/charape.js check",
+    "clean": "node bin/charape.js clean",
+    "rilis": "node rilis.js",
+    "test": "node test/verify.js",
+    "build:cjs": "npx esbuild lib/index.js --bundle --platform=node --format=cjs --external:pino --external:ws --external:protobufjs --external:curve25519-js --external:music-metadata --external:p-queue --external:cache-manager --external:lru-cache --external:@hapi/boom --external:async-mutex --external:chalk --external:axios --external:form-data --footer:js=\"module.exports = Object.assign(module.exports.default || module.exports, module.exports); module.exports.default = module.exports;\" --outfile=lib/index.cjs && npx esbuild WAProto/index.js --bundle --platform=node --format=cjs --external:protobufjs --outfile=WAProto/index.cjs"
+  },
+  "keywords": [
+    "charape",
+    "baileys",
+    "whatsapp",
+    "whatsapp-api",
+    "whatsapp-web",
+    "whatsapp-bot",
+    "wa-bot",
+    "websocket",
+    "multi-device",
+    "supervisor",
+    "bot-runner"
+  ],
+  "homepage": "https://charape.id",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charape/charape.git"
+  },
+  "bugs": {
+    "url": "https://github.com/charape/charape/issues"
+  },
+  "license": "MIT",
+  "author": "charape",
+  "dependencies": {
+    "@cacheable/node-cache": "^1.4.0",
+    "@hapi/boom": "^9.1.3",
+    "async-mutex": "^0.5.0",
+    "axios": "^1.20.0",
+    "cache-manager": "^7.2.8",
+    "chalk": "^4.1.2",
+    "curve25519-js": "^0.0.4",
+    "form-data": "^4.0.6",
+    "lru-cache": "^11.1.0",
+    "music-metadata": "^11.12.3",
+    "p-queue": "^9.0.0",
+    "pino": "^9.6",
+    "protobufjs": "^7.5.6",
+    "whatsapp-rust-bridge": "0.5.4",
+    "ws": "^8.13.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

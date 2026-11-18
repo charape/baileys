@@ -1,0 +1,44 @@
+# Defense-in-depth shield for npm package distribution
+
+# Test suites & benchmarks
+test/
+tests/
+__tests__/
+*.test.js
+*.spec.js
+dummy_session/
+
+# Secrets, Environment & Auth Files
+.env
+.env.*
+*.env
+.panel_sandbox/
+panel-debug.cjs
+panel-debug.js
+*.zip
+*.tgz
+*session*
+*auth*
+creds.json
+*.tmp
+*.tmp.*
+
+# Databases & Runtime Logs
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Source Maps & Build Tools
+*.map
+.git/
+.github/
+.vscode/
+.idea/
+
+# Developer Helpers
+rilis.js
+scratch*
+WAProto/*.proto
+WAProto/*.sh
+WAProto/fix-imports.js

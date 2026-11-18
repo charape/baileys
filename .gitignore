@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment & Secrets
+.env
+.env.*
+*.env
+.panel_sandbox/
+panel-debug.cjs
+panel-debug.js
+*.zip
+*.tgz
+
+# WhatsApp Auth & Session Data Folders (NEVER LEAK TO GIT!)
+auth_info_baileys/
+*session*/
+*auth_info*/
+creds.json
+*.json.tmp*
+*.tmp.*
+*.tmp
+
+# Databases & Storage
+*.db
+*.sqlite
+*.sqlite3
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test & Coverage
+test/dummy*
+coverage/
+.nyc_output/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+*.swp
