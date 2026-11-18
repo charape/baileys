@@ -58,10 +58,10 @@
   "homepage": "https://charape.id",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/charape/charape.git"
+    "url": "git+https://github.com/charape/baileys.git"
   },
   "bugs": {
-    "url": "https://github.com/charape/charape/issues"
+    "url": "https://github.com/charape/baileys/issues"
   },
   "license": "MIT",
   "author": "charape",

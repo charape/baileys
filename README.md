@@ -1,61 +1,61 @@
-# charape
+# Baileys (charape Edition)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-charape%2Fbaileys-informational.svg)](https://github.com/charape/baileys)
 
 High-performance, resilient WhatsApp Multi-Device engine and process supervisor for Node.js. Hand-crafted and maintained by **charape**.
 
-`charape` is built for bot developers who require absolute stability in long-running production environments, such as VPS instances and Pterodactyl panels.
+Engine ini dibangun khusus untuk pengembang bot WhatsApp yang membutuhkan stabilitas absolut, tahan terhadap spam berat/barbar, dan handal di lingkungan long-running seperti VPS dan panel Pterodactyl.
 
 ---
 
-## Fitur Utama
+## Keunggulan & Fitur Utama
 
-- **Dual-Engine Universal Drop-in:** Mendukung 100% ekosistem bot berbasis **`@adiwajshing/baileys`** (arsitektur klasik: `useSingleFileAuthState`, `makeWALegacySocket`, `isJidUser`, `STORIES_JID`, default function exports) maupun **`@whiskeysockets/baileys`** (arsitektur modern).
-- **SWGC & Group Status Full Support:** Mendukung penuh Status WhatsApp Group Chat (`groupStatusMessageV2`), sinkronisasi `messageSecret` 32-byte tanpa corrupt key, serta banner dan anotasi **"Lihat saluran"** pada video, gambar, dan dokumen.
-- **Media Upload Hardened:** Kompatibel dengan Jimp 0.x / 1.x dan Sharp, thumbnail extractor non-fatal fallback (tidak pernah crash saat thumbnail gagal), video thumbnail via direct pipe spawn, dan MMS handle destructuring.
-- **Atomic Session Protection:** Menulis file kredensial secara atomik (`.tmp` -> `rename`) dengan mutex lock, mencegah korupsi file `creds.json` berukuran 0-byte akibat crash tiba-tiba, Out of Memory (OOM), atau restart panel paksa.
-- **Session Cleaner Terintegrasi:** Dilengkapi fungsi `cleanAuthSession` untuk memangkas ribuan file sementara (`pre-key-*`, `app-state-sync-*`) yang kerap menghabiskan inode/disk server (ENOSPC), dengan proteksi mutlak pada `creds.json`.
-- **Smart Process Supervisor CLI:** Perintah `charape` untuk menjalankan bot dengan auto-restart cerdas (exponential backoff) dan graceful shutdown.
-- **Mandiri & Bersih:** Tanpa dependensi git eksternal, tanpa telemetry, dan hanya berkomunikasi langsung dengan server resmi WhatsApp (`*.whatsapp.net`).
+- **100% Fix Respon Private Chat (DM) & Kontak:** Menyelesaikan masalah klasik bot yang hanya merespon di grup. Menjamin bot selalu merespon di chat pribadi (`@s.whatsapp.net` & `@lid`), kontak tersimpan, maupun nomor baru.
+- **Always-Online & Real-Time Presence:** Sistem heartbeat keep-alive otomatis yang menjaga status bot tetap aktif online secara realtime dan tahan terhadap fluktuasi jaringan.
+- **Anti-Crash & Kebal Spam:** Dilengkapi pelindung bounded cache dan isolasi error unhandled rejection, menjaga bot tetap kokoh dan tidak mental/mokad saat dieksekusi secara barbar.
+- **Iconic Message ID & Terminal Info:** Format ID pesan otomatis berawalan `CHARAPE-` serta kartu log terminal estetik `CHARAPE • INCOMING/OUTGOING CHAT` dengan pelindung batas flood output.
+- **Dual-Engine Universal Drop-in:** Mendukung 100% script bot model **`@whiskeysockets/baileys`** maupun **`@adiwajshing/baileys`**, baik tipe CASE (CommonJS / `require`) maupun Plugin (ES Module / `import`).
+- **Helper Bot Bawaan Lengkap:** Membawa helper esensial seperti `decodeJid`, `getName`, `sendText`, `parseMention`, `cMod`, `copyNForward`, `downloadMediaMessage`, `resolvePnJid`, dan `resolveLidJid`.
+- **Atomic Session Protection:** Menulis file kredensial secara atomik (`.tmp` -> `rename`) dengan mutex lock, mencegah korupsi file `creds.json` berukuran 0-byte akibat crash tiba-tiba atau restart panel paksa.
+- **Smart Session Cleaner Terintegrasi:** Dilengkapi fungsi `cleanAuthSession` untuk membersihkan ribuan file pre-keys sampah tanpa menyentuh file inti sesi.
+- **Smart Process Supervisor CLI:** Perintah bawaan `charape` untuk menjalankan bot dengan auto-restart cerdas dan graceful shutdown.
 
 ---
 
 ## Instalasi
 
-### Sebagai Paket Utama
+### 1. Pasang Langsung via Terminal
 ```bash
-npm install charape
+npm install github:charape/baileys
 ```
 
-### Sebagai Pengganti Bot Tipe `@adiwajshing/baileys` (Tanpa Ubah Script Bot)
-Jika script bot Anda menggunakan tipe `@adiwajshing/baileys`, cukup arahkan di `package.json`:
+### 2. Pasang di `package.json` Bot
+
+Jika bot Anda menggunakan dependensi **`@whiskeysockets/baileys`**:
 ```json
 {
   "dependencies": {
-    "@adiwajshing/baileys": "npm:charape@latest"
-  }
-}
-```
-Atau jika menggunakan tarball offline:
-```json
-{
-  "dependencies": {
-    "@adiwajshing/baileys": "file:./charape-1.0.0.tgz"
+    "@whiskeysockets/baileys": "github:charape/baileys"
   }
 }
 ```
 
-### Sebagai Pengganti Bot Tipe `@whiskeysockets/baileys`
+Atau jika script bot Anda menggunakan tipe **`@adiwajshing/baileys`**:
 ```json
 {
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:charape@latest"
+    "@adiwajshing/baileys": "github:charape/baileys"
   }
 }
 ```
+
 Kemudian jalankan:
 ```bash
 npm install
 ```
-Seluruh import (`@adiwajshing/baileys` maupun `@whiskeysockets/baileys`) yang ada pada bot Anda akan otomatis dialihkan ke engine `charape` tanpa error missing export maupun undefined property!
+Seluruh import (`@whiskeysockets/baileys` maupun `@adiwajshing/baileys`) pada bot Anda akan otomatis dialihkan ke engine `charape` tanpa perlu mengubah baris kode script bot Anda.
 
 ---
 
@@ -66,7 +66,7 @@ import makeWASocket, {
     useMultiFileAuthState,
     DisconnectReason,
     Browsers
-} from 'charape';
+} from '@whiskeysockets/baileys';
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('./session');
@@ -75,7 +75,8 @@ async function startBot() {
         auth: state,
         printQRInTerminal: true,
         browser: Browsers.charape('Chrome'),
-        syncFullHistory: false
+        syncFullHistory: false,
+        markOnlineOnConnect: true
     });
 
     sock.ev.on('creds.update', saveCreds);
@@ -117,10 +118,10 @@ startBot();
 
 ## Pembersihan Sesi Otomatis
 
-Untuk mencegah penumpukan file cache pada penyimpanan server:
+Untuk mencegah penumpukan file cache pre-keys pada penyimpanan server:
 
 ```javascript
-import { cleanAuthSession } from 'charape';
+import { cleanAuthSession } from '@whiskeysockets/baileys';
 
 // Bersihkan file pre-key dan sync tanpa menyentuh creds.json
 const stats = await cleanAuthSession('./session', {
@@ -136,13 +137,13 @@ console.log(`Pembersihan selesai: ${stats.deletedFiles} file dihapus (${(stats.b
 
 ## CLI Supervisor (`npx charape`)
 
-Package ini menyertakan CLI mandiri:
+Package ini menyertakan CLI supervisor mandiri:
 
 ### Menjalankan Bot dengan Auto-Restart
 ```bash
 npx charape start [file.js]
 ```
-Jika file tidak ditentukan, CLI akan otomatis mencari `index.js`, `main.js`, atau `bot.js`. Supervisor menangani sinyal `SIGINT`/`SIGTERM` untuk mematikan proses anak dengan aman.
+Jika file tidak ditentukan, CLI akan otomatis mencari `index.js`, `main.js`, atau `bot.js`.
 
 ### Membersihkan Sesi dari Terminal
 ```bash
@@ -158,4 +159,4 @@ npx charape check
 
 ## Lisensi
 
-Didistribusikan di bawah lisensi MIT. Hak cipta milik **charape** dan para kontributor.
+Didistribusikan di bawah [MIT License](LICENSE). Hak cipta milik **charape** dan para kontributor.
